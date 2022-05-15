@@ -1,0 +1,21 @@
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: nginx
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubesphere.io/creator: admin
+spec:
+  rules:
+    {{- range $key, $value := .Values.hosts }}
+    - host: {{ $value.name }}.{{ $.Values.domain }}
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: http-{{ $value.name }}
+                port:
+                  number: 80
+      {{ end }}

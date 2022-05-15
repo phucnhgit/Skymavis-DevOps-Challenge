@@ -1,0 +1,17 @@
+{{- range $key, $value := .Values.hosts }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: http-{{ $value.name }}
+  labels:
+    app: nginx-{{ $value.name }}
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http-{{ $value.name }}
+  selector:
+    app: nginx-{{ $value.name }}
+{{ end }}

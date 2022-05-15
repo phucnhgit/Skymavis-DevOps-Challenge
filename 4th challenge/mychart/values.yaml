@@ -1,0 +1,21 @@
+# Default values for mychart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+domain: gw.skymavis.xyz
+
+ingress:
+  enabled: false
+  annotations: {}
+
+service:
+  type: NodePort
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  tag: 1.15-alpine
+
+hosts:
+  - name: us
+  - name: eu

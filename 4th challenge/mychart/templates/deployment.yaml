@@ -1,0 +1,44 @@
+{{- range $key, $value := .Values.hosts }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-{{ $value.name }}
+  labels:
+    app: nginx-{{ $value.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-{{ $value.name }}
+  template:
+    metadata:
+      labels:
+        app: nginx-{{ $value.name }}
+    spec:
+      serviceAccountName: default
+      securityContext: {}
+      containers:
+        - name: nginx-{{ $value.name }}
+          image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources: {}
+          command:
+            - /bin/sh
+            - '-c'
+          args:
+            - >-
+              echo {{ $value.name }} > /usr/share/nginx/html/index.html && nginx -g 'daemon off;'
+{{ end }}

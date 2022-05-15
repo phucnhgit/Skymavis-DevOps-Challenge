@@ -1,0 +1,2 @@
+Example
+./getvul_cli.py --app "nginx 1.8" | jq
